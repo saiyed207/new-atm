@@ -1,0 +1,466 @@
+  body {
+background-color:yellow;
+}
+#outer
+{
+position:absolute ;
+width:100%;
+height:100%;
+background-color:silver;
+border-style:double ;
+border-top-left-radius:10px;
+
+border-top-right-radius:10px;
+
+border-color:black;
+border-width:5px;
+border-style:outset;
+text-shadow:0.5px 0.5px black;
+}
+
+#acname
+{
+text-transform:uppercase ;
+font-weight:bold;
+color:black;
+position:absolute ;
+
+
+top:40px;
+left:146px;
+font-size:12.5px;
+text-shadow:1px -1px 1px black;
+}
+
+#de
+{     text-align:center;
+top:100px;
+font-weight:bold;
+font-size:35px;
+color:yellow;
+left:150px;
+}
+
+#b1
+{
+height:40px;
+position:absolute ;
+width:40px;
+background-color:white;
+border-color:black;
+border-width:2px;
+top:200px;
+left:5px;
+
+border-style:solid;
+
+
+}
+#b2
+{height:40px;
+position:absolute ;
+width:40px;
+background-color:white;
+border-color:black;
+border-width:2px;
+top:300px;
+left:5px;
+border-style:solid;
+}
+#b3
+{
+height:40px;
+position:absolute ;
+width:40px;
+background-color:white;
+border-color:black;
+border-width:2px;
+top:400px;
+left:5px;
+border-style:solid;
+}
+#user23
+{
+font-weight:bold;
+color:white;
+position:absolute ;
+left:78px;
+top:50px;
+font-size:40px;
+text-shadow:0.5px -1px 1px black;
+text-shadow:0.5px 0.5px black;
+
+}
+#b4
+{
+height:40px;
+position:absolute ;
+width:40px;
+background-color:white;
+border-color:black;
+border-width:2px;
+top:400px;
+right:5px;
+border-style:solid;
+}
+#b5
+{
+height:40px;
+position:absolute ;
+width:40px;
+background-color:white;
+border-color:black;
+border-width:2px;
+top:300px;
+right:5px;
+border-style:solid;
+}
+#b6
+{
+height:40px;
+position:absolute ;
+width:40px;
+background-color:white;
+border-color:black;
+border-width:2px;
+top:200px;
+right:5px;
+border-style:solid;
+}
+#camera
+{
+width:40px;
+position:absolute ;
+height:40px;
+background-color:lightgrey;
+border-radius:50%;
+left:150px;
+top:8px;
+border-style:double ;
+}
+
+
+.screen{
+
+width: 90%;
+height: 90%;
+position:absolute ;
+background-color:rgb(27, 57, 191);
+left:50px;
+top:30px;
+bottom:30px;
+right:30px;
+border-width:15px; 
+border-top-style:inset;
+border-top-color:black;
+border-bottom-style:outset;
+border-bottom-color:black;
+border-left-style:inset;
+border-left-color:black;
+border-right-style:outset;
+border-right-color:black;
+}
+
+#round1
+{  width:50px;
+height:50px;
+border-radius:50%;
+background:red;
+animation: ball 0.6s infinite ;
+
+position:absolute;
+
+left:12cm;
+margin-top:175px;
+}
+
+#round2
+{  width:50px;
+height:50px;
+border-radius:50%;
+background:green;
+animation: ball 0.9s infinite ;
+
+position:absolute;
+
+left:16cm;
+margin-top:175px;
+}
+#round3
+{  width:50px;
+height:50px;
+border-radius:50%;
+background:yellow;
+animation: ball 0.8s infinite ;
+
+position:absolute;
+
+left:14cm;
+margin-top:175px;
+}
+@keyframes ball 
+{
+0% 
+{
+top: 0;
+}
+10
+{
+top:0.10cm;
+}
+20
+{
+top:0.16cm;
+}
+30
+{
+top:0.22cm;
+}
+40% 
+{
+top:0.28cm;
+}
+50% 
+{
+top: 0.34cm;
+}
+60% 
+{
+top: 0.28cm;  
+}
+70%
+{
+top:0.22cm; 
+}
+80% 
+{
+top:0.16cm;        
+
+}
+90%
+{
+top:0.10cm;
+}
+100% 
+{
+top: 0;
+
+}
+}
+#loading
+{
+width: 100%;
+height: 100%;
+position:absolute ;
+background-color:blue;
+left:0.01px;
+top:0.01px;
+bottom:0.01px;
+right:0.01px;
+overflow:hidden;
+}
+
+#inf {
+font-size:70px;
+ margin-left:250px;
+ color:white
+}
+
+#card {
+color:white;
+font-weight:bold;
+ margin-top:30%;
+}
+
+#light
+{
+height:6px;
+width:8px;
+border-radius:50%;
+border-style:solid;
+border-color:black;
+border-width:2px;
+position:absolute ;
+top:3.5px;
+left:22px;
+animation: blr 0.5s infinite;
+}
+@keyframes blr {
+0% {background-color: #FF0000;}
+
+100% {background-color: green;}
+}
+
+.text {
+font-size:50px;
+ margin-top:12%;
+color:white;
+text-align:center;
+}
+
+.pass,.pass2
+{
+height:50px;
+position:absolute ;
+width:450px;
+top:250px;
+left:350px;
+font-size:30px;
+border-radius:5px;
+text-shadow:0.5px 0.5px black;
+border-style:solid;
+border-color:black;
+}
+#account_error {
+width:100%;
+ height:60px;
+ background-color:aqua;
+color:blue;
+ margin-top:-200px;
+ font-size:40px;
+ text-align:center;
+}
+#password_error {
+width:100%;
+ height:60px;
+ background-color:aqua;
+color:blue;
+ margin-top:-200px;
+ font-size:40px;
+ text-align:center;
+}
+#btne1,#btne2,#submit_password,#submit_account, #submit_deposit, #submit_withdraw, #balance_infor , #account_details_info, #submit_change_pin
+{
+height:40px;
+position:absolute ;
+width:150px;
+top:350px;
+left:520px;
+font-size:18px;
+color:white;
+background-color:rgb(11, 140, 142);
+text-align:center;
+
+border:1px solid rgb(11,140,142);
+border-radius:50px;
+text-shadow:0.5px 0.5px white;
+maxlength:8;
+}
+#wdr
+{
+position:absolute ;
+width:300px;
+height:60px;
+background-color:rgb(8, 226, 233);
+border:1px solid rgb(8, 226, 233);
+border-radius:50px;
+font-size:20px;
+color:white;
+left:10px;
+top:180px;
+}
+#dep
+{
+position:absolute ;
+width:300px;
+height:60px;
+background-color:rgb(8, 226, 233);
+border:1px solid rgb(8, 226, 233);
+font-size:20px;
+border-radius:50px;
+color:white;
+left:10px;
+top:280px;
+
+}
+#mst
+{
+position:absolute ;
+width:300px;
+height:60px;
+background-color:rgb(8, 226, 233);
+border:1px solid rgb(8, 226, 233);
+border-radius:50px;
+font-size:20px;
+color:white;
+left:10px;
+top:380px;
+}
+#det
+
+{
+position:absolute ;
+width:300px;
+height:60px;
+background-color:rgb(8, 226, 233);
+border:1px solid rgb(8, 226, 233);
+border-radius:50px;
+font-size:20px;
+color:white;
+right:10px;
+top:180px;
+}
+#otr {
+position:absolute ;
+width:300px;
+height:60px;
+background-color:rgb(8, 226, 233);
+border:1px solid rgb(8, 226, 233);
+border-radius:50px;
+font-size:20px;
+color:white;
+right:10px;
+top:280px;
+}
+#cpin
+{
+position:absolute ;
+width:300px;
+height:60px;
+background-color:rgb(8, 226, 233);
+border:1px solid rgb(8, 226, 233);
+border-radius:50px;
+font-size:20px;
+color:white;
+right:10px;
+top:380px;
+}
+#back,#back2,#back3
+
+{
+position:absolute ;
+width:300px;
+height:60px;
+background-color:rgb(8, 226, 233);
+border:1px solid rgb(8, 226, 233);
+border-radius:50px;
+font-size:20px;
+color:white;
+left:10px;
+top:350px;
+}
+.transaction {
+width:100%;
+ height:60px;
+text-align:center;
+ background-color:aqua;
+color:blue;
+ margin-top:-20px;
+ font-size:40px;
+ text-align:center";
+}
+
+#back_to_features_withdraw, #back_to_features_deposit, #back_to_features_balance, #back_to_features_details, #back_to_features_change_pin
+{
+position:absolute ;
+width:300px;
+height:60px;
+background-color:rgb(8, 226, 233);
+border:1px solid rgb(8, 226, 233);
+border-radius:50px;
+font-size:20px;
+color:white;
+right:10px;
+top:280px;
+}
+
