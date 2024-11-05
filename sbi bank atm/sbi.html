@@ -26,7 +26,7 @@
         </div>
         <div class="screen">
             <div id="loading" class="visible">
-                <p id="inf">Please wait 5 seconds</p>
+                <p id="inf" style="margin-right:20%">Please wait 5 seconds</p>
                 <div id="round1"></div>
                 <div id="round2"></div>
                 <div id="round3"></div>
@@ -34,7 +34,7 @@
             </div>
 
             <div id="begin" class="hidden">
-                <img width="400" height="200" src="javagoats.png" alt="Java Goats Logo"/>
+                <img width="400" height="200" src="javagoats.png" alt="ATM Machine"/>
                 <p class="text">Enter your Account Number</p>
                 <input type="text" class="pass2" id="account_number" maxlength="8">
                 <button id="submit_account">Submit</button>
@@ -89,12 +89,12 @@
             </div>
 
             <div id="changePinPage" class="hidden">
-                <h2 class="text">Change PIN</h2>
-                <input type="password" id="new_pin" class="pass2" placeholder="Enter new PIN" maxlength="20">
-                <button id="submit_change_pin">Submit Change PIN</button>
-                <p id="change_pin_message" class="hidden"></p>
-                <button class="button" id="back_to_features_change_pin">Back</button>
-            </div>
+    <h2 class="text">Change PIN</h2>
+    <input type="password" id="new_pin" class="pass2" placeholder="Enter new PIN" maxlength="20">
+    <button id="submit_change_pin">Submit Change PIN</button>
+    <p id="change_pin_message" class="hidden"></p>
+    <button class="button" id="back_to_features_change_pin">Back</button>
+</div>
 
             <div id="thankYouPage" class="hidden">
     <h2 class="text">Thank You!</h2>
@@ -156,6 +156,8 @@
 
     document.getElementById('dep').addEventListener('click', () => handleVisibility('depositPage', 'atm_features'));
     document.getElementById('wdr').addEventListener('click', () => handleVisibility('withdrawPage', 'atm_features'));
+document.getElementById('mst').addEventListener('click', () => handleVisibility('balancePage', 'atm_features'));
+document.getElementById('cpin').addEventListener('click', () => handleVisibility('changePinPage', 'atm_features'));
 
   document.getElementById('submit_deposit').addEventListener('click', function() {
     const amount = parseInt(document.getElementById('deposit_amount').value, 10);
@@ -220,8 +222,80 @@ document.getElementById('submit_withdraw').addEventListener('click', function() 
     });
 });
 
-    document.getElementById('back_to_features_deposit').addEventListener('click', () => handleVisibility('loading', 'depositPage'));
-    document.getElementById('back_to_features_withdraw').addEventListener('click', () => handleVisibility('loading', 'withdrawPage'));
+
+   document.getElementById('mst').addEventListener('click', function() {
+    fetch('backend.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'balance_inquiry=true' // Trigger balance inquiry
+    })
+    .then(response => response.json())
+    .then(data => {
+        const balanceInfo = document.getElementById('balance_info');
+        if (data.success) {
+            // Apply inline styling for professional look
+            balanceInfo.innerHTML = `
+                <span style="font-size: 24px; color: white;">
+                    Account Holder: ${data.holder}<br>
+                    Account Number: ${data.number}<br>
+                    Current Balance: $${data.balance}
+                </span>
+            `;
+            balanceInfo.classList.remove('hidden');
+        } else {
+            balanceInfo.innerHTML = `
+                <span style="font-size: 24px; color: white;">
+                    ${data.message}
+                </span>
+            `;
+            balanceInfo.classList.remove('hidden');
+        }
+        handleVisibility('balancePage', 'atm_features');
+    });
+});
+
+document.getElementById('submit_change_pin').addEventListener('click', function() {
+    const newPin = document.getElementById('new_pin').value;
+    if (newPin.length < 4 || newPin.length > 20) {
+        document.getElementById('change_pin_message').innerText = "Error: PIN must be between 4 and 20 characters.";
+        document.getElementById('change_pin_message').classList.remove('hidden');
+        return;
+    }
+    fetch('backend.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `change_pin=true&new_pin=${newPin}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('change_pin_message').innerText = data.message;
+        document.getElementById('change_pin_message').classList.remove('hidden');
+        if (data.success) {
+            // Display a thank you page with a success message
+            handleVisibility('thankYouPage', 'changePinPage');
+            document.getElementById('remaining_balance').innerText = "Your PIN has been successfully changed.";
+            // Reload after 2 seconds for a fresh start
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+    });
+});
+
+
+
+    document.getElementById('back_to_features_balance').addEventListener('click', () => handleVisibility('atm_features', 'balancePage'));
+
+document.getElementById('back_to_features_change_pin').addEventListener('click', () => handleVisibility('atm_features', 'changePinPage'));
+
+    document.getElementById('back_to_features_deposit').addEventListener('click', () => handleVisibility('atm_features', 'depositPage'));
+    document.getElementById('back_to_features_withdraw').addEventListener('click', () => handleVisibility('atm_features', 'withdrawPage'));
+
+document.getElementById('otr').addEventListener('click', () => {
+    location.reload(); // Refresh the page
+});
+
+
 </script>
 </body>
 </html>
