@@ -66,27 +66,35 @@ if (isset($_POST['submit_password'])) {
 
 // Handle balance inquiry
 if (isset($_POST['balance_inquiry'])) {
-    $account_id = $_SESSION['account_id'];
+    if (isset($_SESSION['account_id'])) {
+        $account_id = $_SESSION['account_id'];
 
-    $stmt = $conn->prepare("SELECT account_holder_name, account_number, account_balance FROM accounts WHERE id = ?");
-    $stmt->bind_param("i", $account_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        $stmt = $conn->prepare("SELECT account_holder_name, account_number, account_balance FROM accounts WHERE id = ?");
+        if ($stmt) {
+            $stmt->bind_param("i", $account_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        echo json_encode([
-            'success' => true,
-            'holder' => $row['account_holder_name'],
-            'number' => $row['account_number'],
-            'balance' => $row['account_balance']
-        ]);
+            if ($result && $result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                echo json_encode([
+                    'success' => true,
+                    'holder' => $row['account_holder_name'],
+                    'number' => $row['account_number'],
+                    'balance' => $row['account_balance']
+                ]);
+            } else {
+                echo json_encode(['success' => false, 'message' => "Error: Unable to retrieve balance."]);
+            }
+            $stmt->close();
+        } else {
+            echo json_encode(['success' => false, 'message' => "Error: Failed to prepare statement."]);
+        }
     } else {
-        echo json_encode(['success' => false, 'message' => "Error: Unable to retrieve balance."]);
+        echo json_encode(['success' => false, 'message' => "Error: Account ID not set in session."]);
     }
     exit();
 }
-
 // Handle deposit submission
 if (isset($_POST['deposit'])) {
     $account_id = $_SESSION['account_id'];
@@ -154,26 +162,21 @@ if (isset($_POST['withdraw_amount'])) {
 }
 
 // Handle change PIN submission
-if (isset($_POST['new_pin'])) {
-    $new_pin = sanitize_input($_POST['new_pin']);
-    $account_id = $_SESSION['account_id'];
+if (isset($_POST['change_pin'])) {
+    $new_pin = $_POST['new_pin'];
+    $account_number = $_SESSION['account_number']; // Assuming a session holds the account number
 
-    // Validate the new PIN
-    if (empty($new_pin)) {
-        echo json_encode(['success' => false, 'message' => "Error: New PIN cannot be empty."]);
-        exit();
-    }
+    // Validate and update the PIN (use prepared statements for security)
+    $stmt = $conn->prepare("UPDATE accounts SET pin = ? WHERE account_number = ?");
+    $stmt->bind_param("si", $new_pin, $account_number);
 
-    // Update the PIN in the database
-    $stmt = $conn->prepare("UPDATE accounts SET pin = ? WHERE id = ?");
-    $stmt->bind_param("si", $new_pin, $account_id);
-    
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'PIN changed successfully!']);
+        echo json_encode(['success' => true, 'message' => 'PIN changed successfully.']);
     } else {
-        echo json_encode(['success' => false, 'message' => "Error: Unable to change PIN."]);
+        echo json_encode(['success' => false, 'message' => 'Failed to change PIN. Please try again.']);
     }
-    exit();
+    $stmt->close();
+    exit;
 }
 
 if (isset($_POST['fetch_balance'])) {
