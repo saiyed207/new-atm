@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hidden { display: none; }
+        .visible { display: block; }
+        .screen { text-align: center; }
+    </style>
+    <title>ATM Example</title>
+</head>
+<body>
+<div id="atmmac">
+    <div id="outer">
+        <div id="camera"><div id="lens"></div><div id="light"></div></div>
+        <div id="com">
+            <button id="b1"></button>
+            <button id="b2"></button>
+            <button id="b3"></button>
+            <button id="b4"></button>
+            <button id="b5"></button>
+            <button id="b6"></button>
+            <p id="com1"><b>JAVA GOAT ATM</b></p>
+        </div>
+        <div class="screen">
+            <div id="loading" class="visible">
+                <p id="inf" style="margin-right:20%">Please wait 5 seconds</p>
+                <div id="round1"></div>
+                <div id="round2"></div>
+                <div id="round3"></div>
+                <p id="card">Card processing</p>
+            </div>
+
+            <div id="begin" class="hidden">
+                <img width="400" height="200" src="javagoats.png" alt="ATM Machine"/>
+                <p class="text">Enter your Account Number</p>
+                <input type="text" class="pass2" id="account_number" maxlength="8">
+                <button id="submit_account">Submit</button>
+                <p id="account_error" class="hidden">Invalid Account number !!</p>
+            </div>
+
+            <div id="enterPassword" class="hidden">
+                <img width="400" height="200" src="sbi.png" alt="SBI Logo"/>
+                <p class="text">Enter your Password</p>
+                <input type="password" class="pass2" id="pin" maxlength="20">
+                <button id="submit_password">Submit</button>
+                <p id="password_error" class="hidden">Invalid Pin !!</p>
+            </div>
+
+            <div id="atm_features" class="hidden">
+                <img width="240" height="100" src="sbi.png"/>
+                <div class="transaction">Please Select Transaction</div>
+                <button class="button" id="dep">Deposit</button>
+                <button class="button" id="wdr">Withdraw</button>
+                <button class="button" id="mst">Balance Inquiry</button>
+                <button class="button" id="det">Account Details</button>
+                <button class="button" id="cpin">Change PIN</button>
+                <button class="button" id="otr">Log Out</button>
+            </div>
+
+            <div id="depositPage" class="hidden">
+                <h2 class="text">Deposit Amount</h2>
+                <input type="number" id="deposit_amount" class="pass2" placeholder="Enter amount" min="1">
+                <button id="submit_deposit">Submit Deposit</button>
+                <p id="deposit_message" class="hidden"></p>
+                <button class="button" id="back_to_features_deposit">Back to Loading</button>
+            </div>
+
+            <div id="withdrawPage" class="hidden">
+                <h2 class="text">Withdraw Amount</h2>
+                <input type="number" id="withdraw_amount" class="pass2" placeholder="Enter amount" min="1">
+                <button id="submit_withdraw">Submit Withdraw</button>
+                <p id="withdraw_message" class="hidden"></p>
+                <button class="button" id="back_to_features_withdraw">Back to Loading</button>
+            </div>
+
+            <div id="balancePage" class="hidden">
+                <h2 class="text">Your Balance and Info</h2>
+                <p id="balance_info" class="hidden"></p>
+                <button class="button" id="back_to_features_balance">Back</button>
+            </div>
+
+            <div id="accountDetailsPage" class="hidden">
+                <h2 class="text">Account Details</h2>
+                <p id="account_details_info" class="hidden"></p>
+                <button class="button" id="back_to_features_details">Back</button>
+            </div>
+
+            <div id="changePinPage" class="hidden">
+    <h2 class="text">Change PIN</h2>
+    <input type="password" id="new_pin" class="pass2" placeholder="Enter new PIN" maxlength="20">
+    <button id="submit_change_pin">Submit Change PIN</button>
+    <p id="change_pin_message" class="hidden"></p>
+    <button class="button" id="back_to_features_change_pin">Back</button>
+</div>
+
+            <div id="thankYouPage" class="hidden">
+    <h2 class="text">Thank You!</h2>
+    <p>Have a nice day!</p>
+    <p id="remaining_balance"></p> <!-- Display remaining balance here -->
+</div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    setTimeout(function() {
+        document.getElementById('loading').classList.replace('visible', 'hidden');
+        document.getElementById('begin').classList.replace('hidden', 'visible');
+    }, 1500);
+
+    const handleVisibility = (showId, hideId) => {
+        document.getElementById(hideId).classList.replace('visible', 'hidden');
+        document.getElementById(showId).classList.replace('hidden', 'visible');
+    };
+
+    document.getElementById('submit_account').addEventListener('click', function() {
+        const accountNumber = document.getElementById('account_number').value;
+        fetch('backend.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `submit_account=true&account_number=${accountNumber}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                handleVisibility('enterPassword', 'begin');
+                document.getElementById('account_error').classList.add('hidden');
+            } else {
+                document.getElementById('account_error').innerText = data.message;
+                document.getElementById('account_error').classList.remove('hidden');
+            }
+        });
+    });
+
+    document.getElementById('submit_password').addEventListener('click', function() {
+        const pin = document.getElementById('pin').value;
+        fetch('backend.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `submit_password=true&pin=${pin}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                handleVisibility('atm_features', 'enterPassword');
+            } else {
+                document.getElementById('password_error').innerText = data.message;
+                document.getElementById('password_error').classList.remove('hidden');
+            }
+        });
+    });
+
+    document.getElementById('dep').addEventListener('click', () => handleVisibility('depositPage', 'atm_features'));
+    document.getElementById('wdr').addEventListener('click', () => handleVisibility('withdrawPage', 'atm_features'));
+document.getElementById('mst').addEventListener('click', () => handleVisibility('balancePage', 'atm_features'));
+document.getElementById('cpin').addEventListener('click', () => handleVisibility('changePinPage', 'atm_features'));
+
+  document.getElementById('submit_deposit').addEventListener('click', function() {
+    const amount = parseInt(document.getElementById('deposit_amount').value, 10);
+    if (isNaN(amount) || amount <= 0) {
+        document.getElementById('deposit_message').innerText = "Error: Please enter a valid deposit amount.";
+        document.getElementById('deposit_message').classList.remove('hidden');
+        return;
+    }
+    fetch('backend.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `deposit=${amount}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('deposit_message').innerText = data.message;
+        document.getElementById('deposit_message').classList.remove('hidden');
+        if (data.success) {
+            // Fetch the updated account balance immediately
+            fetch('backend.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'fetch_balance=true' // Trigger balance fetch
+            })
+            .then(response => response.json())
+            .then(balanceData => {
+                if (balanceData.success) {
+                    // Update the remaining balance display on the thank you page
+                    document.getElementById('remaining_balance').innerText = `Remaining Balance: $${balanceData.balance}`;
+                }
+            });
+
+            // Show the thank you page
+            handleVisibility('thankYouPage', 'depositPage');
+            setTimeout(() => {
+                location.reload(); // Refresh the page
+            }, 2000);
+        }
+    });
+});
+
+
+document.getElementById('submit_withdraw').addEventListener('click', function() {
+    const amount = parseInt(document.getElementById('withdraw_amount').value, 10);
+    fetch('backend.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `withdraw_amount=${amount}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('withdraw_message').innerText = data.message;
+        document.getElementById('withdraw_message').classList.remove('hidden');
+        if (data.success) {
+            // Show the thank you page
+            handleVisibility('thankYouPage', 'withdrawPage');
+            // Refresh the page after 2 seconds
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+    });
+});
+
+
+   document.getElementById('mst').addEventListener('click', function() {
+    fetch('backend.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'balance_inquiry=true' // Trigger balance inquiry
+    })
+    .then(response => response.json())
+    .then(data => {
+        const balanceInfo = document.getElementById('balance_info');
+        if (data.success) {
+            // Apply inline styling for professional look
+            balanceInfo.innerHTML = `
+                <span style="font-size: 24px; color: white;">
+                    Account Holder: ${data.holder}<br>
+                    Account Number: ${data.number}<br>
+                    Current Balance: $${data.balance}
+                </span>
+            `;
+            balanceInfo.classList.remove('hidden');
+        } else {
+            balanceInfo.innerHTML = `
+                <span style="font-size: 24px; color: white;">
+                    ${data.message}
+                </span>
+            `;
+            balanceInfo.classList.remove('hidden');
+        }
+        handleVisibility('balancePage', 'atm_features');
+    });
+});
+
+document.getElementById('submit_change_pin').addEventListener('click', function() {
+    const newPin = document.getElementById('new_pin').value;
+    if (newPin.length < 4 || newPin.length > 20) {
+        document.getElementById('change_pin_message').innerText = "Error: PIN must be between 4 and 20 characters.";
+        document.getElementById('change_pin_message').classList.remove('hidden');
+        return;
+    }
+    fetch('backend.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `change_pin=true&new_pin=${newPin}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('change_pin_message').innerText = data.message;
+        document.getElementById('change_pin_message').classList.remove('hidden');
+        if (data.success) {
+            // Display a thank you page with a success message
+            handleVisibility('thankYouPage', 'changePinPage');
+            document.getElementById('remaining_balance').innerText = "Your PIN has been successfully changed.";
+            // Reload after 2 seconds for a fresh start
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+    });
+});
+
+
+
+    document.getElementById('back_to_features_balance').addEventListener('click', () => handleVisibility('atm_features', 'balancePage'));
+
+document.getElementById('back_to_features_change_pin').addEventListener('click', () => handleVisibility('atm_features', 'changePinPage'));
+
+    document.getElementById('back_to_features_deposit').addEventListener('click', () => handleVisibility('atm_features', 'depositPage'));
+    document.getElementById('back_to_features_withdraw').addEventListener('click', () => handleVisibility('atm_features', 'withdrawPage'));
+
+document.getElementById('otr').addEventListener('click', () => {
+    location.reload(); // Refresh the page
+});
+
+
+</script>
+</body>
+</html>
